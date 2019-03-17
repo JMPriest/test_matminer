@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: mdf-toolbox
+Version: 0.4.1
+Summary: Materials Data Facility Python utilities
+Home-page: https://github.com/materials-data-facility/toolbox
+License: Apache License, Version 2.0
+Keywords: MDF,Materials Data Facility,materials science,utility
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.4
+Requires-Dist: globus-nexus-client (>=0.2.8)
+Requires-Dist: globus-sdk (>=1.7.0)
+Requires-Dist: requests (>=2.18.4)
+
+Toolbox is the Materials Data Facility Python package containing utility functions and other tools.
+
+

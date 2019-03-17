@@ -1,0 +1,24 @@
+Metadata-Version: 2.1
+Name: mdf-forge
+Version: 0.6.6
+Summary: Materials Data Facility python package
+Home-page: https://github.com/materials-data-facility/forge
+License: Apache License, Version 2.0
+Keywords: MDF,Materials Data Facility,materials science,dft,data discovery,supercomputing,light sources
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.4
+Requires-Dist: mdf-toolbox (>=0.2.0)
+Requires-Dist: globus-sdk (>=1.5.0)
+Requires-Dist: requests (>=2.18.4)
+Requires-Dist: tqdm (>=4.19.4)
+
+Forge is the Materials Data Facility Python package to interface and leverage the MDF Data Discovery service. Forge allows users to perform simple queries and facilitiates moving and synthesizing results.
+
+

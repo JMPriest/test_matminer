@@ -1,0 +1,13 @@
+README.rst
+setup.cfg
+setup.py
+globus_nexus_client/__init__.py
+globus_nexus_client/client.py
+globus_nexus_client/goauth_authorizer.py
+globus_nexus_client/response.py
+globus_nexus_client/version.py
+globus_nexus_client.egg-info/PKG-INFO
+globus_nexus_client.egg-info/SOURCES.txt
+globus_nexus_client.egg-info/dependency_links.txt
+globus_nexus_client.egg-info/requires.txt
+globus_nexus_client.egg-info/top_level.txt
