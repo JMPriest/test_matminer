@@ -53,7 +53,7 @@ if __name__ == '__main__':
     feature_labels = feature_calculators.feature_labels()
     print(feature_labels[0:5:])
     # 计算特征量
-    data = feature_calculators.featurize_dataframe(data, col_id='composition_obj');
+    data = feature_calculators.featurize_dataframe(data, col_id='composition_obj')
     print('Generated %d features' % len(feature_labels))
     print('Training set size:', 'x'.join([str(x) for x in data[feature_labels].shape]))
     # 去除空值缺省值
