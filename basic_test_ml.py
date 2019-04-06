@@ -28,6 +28,7 @@ if __name__ == '__main__':
     data = data[['oqmd.delta_e.value', 'material.composition']]
     data = data.rename(columns={'oqmd.delta_e.value': 'delta_e', 'material.composition': 'composition'})
     data = StrToComposition(target_col_id='composition_obj').featurize_dataframe(data, 'composition')
+    data.sort_values('delta_e', ascending=True, inplace=True)
     print(data.head(3))
     for k in ['delta_e']:
         data[k] = pd.to_numeric(data[k])
@@ -45,13 +46,12 @@ if __name__ == '__main__':
     original_count = len(data)
     data = data[np.logical_and(data['delta_e'] >= -20, data['delta_e'] <= 5)]
     print('Removed %d/%d entries' % (original_count - len(data), original_count))
-
+    print(data.head(3))
     # 设定化学计算规范：使用MagpieData数据源初始化元素属性，返回各层轨道电子数量信息，假设元素以单一氧化态存在
     feature_calculators = MultipleFeaturizer([cf.Stoichiometry(), cf.ElementProperty.from_preset("magpie"),
                                               cf.ValenceOrbital(props=['avg']), cf.IonProperty(fast=False)])
     # 获得特征名
     feature_labels = feature_calculators.feature_labels()
-    print(feature_labels[0:5:])
     # 计算特征量
     data = feature_calculators.featurize_dataframe(data, col_id='composition_obj')
     print('Generated %d features' % len(feature_labels))
@@ -60,6 +60,7 @@ if __name__ == '__main__':
     original_count = len(data)
     data = data[~ data[feature_labels].isnull().any(axis=1)]
     print('Removed %d/%d entries' % (original_count - len(data), original_count))
+    print(data.head(3))
     # 调用随机森林
     # “随机森林”算法通过训练许多不同的决策树模型来工作，
     # 其中每个模型都在数据集的不同子集上进行训练。
@@ -69,14 +70,17 @@ if __name__ == '__main__':
                          scoring='neg_mean_squared_error', cv=ShuffleSplit(n_splits=1, test_size=0.1))
     model.fit(data[feature_labels], data['delta_e'])
     # 找到的最佳特征集
-    print("model.best_score:"+model.best_score_)
+    print("model.best_score:"+str(model.best_score_))
     # 画出最大特征量与准确度的关系
     fig, ax = plt.subplots()
     ax.scatter(model.cv_results_['param_max_features'].data,
                np.sqrt(-1 * model.cv_results_['mean_test_score']))
-    ax.scatter([model.best_params_['max_features']], np.sqrt([-1 * model.best_score_]), marker='o', color='r', s=40)
+    ax.scatter([model.best_params_['max_features']], [model.best_score_], marker='o', color='r', s=40)
     ax.set_xlabel('Max. Features')
-    ax.set_ylabel('RMSE (eV/atom)')
+    ax.set_ylabel('MSE (eV/atom)')
+    fig.set_size_inches(7, 7)
+    fig.tight_layout()
+    fig.savefig('features_rmse.png', dpi=320)
     # 保存最佳模型
     model = model.best_estimator_
     # 10次交叉验证
@@ -95,9 +99,9 @@ if __name__ == '__main__':
     ax.set_xlim(ax.get_ylim())
     ax.set_ylim(ax.get_xlim())
 
-    mae = metrics.mean_absolute_error(data['delta_e'], cv_prediction)
+    mse = metrics.mean_squared_error(data['delta_e'], cv_prediction)
     r2 = metrics.r2_score(data['delta_e'], cv_prediction)
-    ax.text(0.5, 0.1, 'MAE: {:.2f} eV/atom\n$R^2$:  {:.2f}'.format(mae, r2),
+    ax.text(0.5, 0.1, 'MSE: {:.2f} eV/atom\n$R^2$:  {:.2f}'.format(mse, r2),
             transform=ax.transAxes,
             bbox={'facecolor': 'w', 'edgecolor': 'k'})
 
